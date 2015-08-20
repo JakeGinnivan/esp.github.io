@@ -1,1 +1,1 @@
-sphinxcontrib-examplecode
+sphinxcontrib-examplecode == 0.1.0
