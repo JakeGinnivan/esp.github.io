@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; esp 0.2.13 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/examplecode.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.13',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/examplecode.js"></script>
+    <link rel="top" title="esp 0.2.13 documentation" href="../index.html" />
+    <link rel="prev" title="ESP" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>Sample code below to test things out.</p>
+<div class="example-code container">
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">// Create an event raiser and publish an event</span>
+<span class="kr">class</span> <span class="nx">CarScreenController</span> <span class="p">{</span>
+        <span class="nx">constructor</span><span class="p">(</span><span class="nx">router</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">_router</span> <span class="o">=</span> <span class="nx">router</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">start</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">_listenForModelChanges</span><span class="p">();</span>
+
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Simulating some user actions over 4 seconds: &quot;</span><span class="p">);</span>
+                <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_router</span><span class="p">.</span><span class="nx">publishEvent</span><span class="p">(</span><span class="s1">&#39;myModelId&#39;</span><span class="p">,</span> <span class="s1">&#39;carMakeChangedEvent&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">make</span><span class="o">:</span> <span class="s1">&#39;BMW&#39;</span> <span class="p">});</span>
+                <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_router</span><span class="p">.</span><span class="nx">publishEvent</span><span class="p">(</span><span class="s1">&#39;myModelId&#39;</span><span class="p">,</span> <span class="s1">&#39;isSportModelChangedEvent&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">isSportModel</span><span class="o">:</span> <span class="kc">true</span> <span class="p">});</span>
+                <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+                <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                        <span class="k">this</span><span class="p">.</span><span class="nx">_router</span><span class="p">.</span><span class="nx">publishEvent</span><span class="p">(</span><span class="s1">&#39;myModelId&#39;</span><span class="p">,</span> <span class="s1">&#39;colorChangedEvent&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;blue&#39;</span> <span class="p">});</span>
+                <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">_listenForModelChanges</span><span class="p">()</span> <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">_router</span>
+                        <span class="p">.</span><span class="nx">getModelObservable</span><span class="p">(</span><span class="s1">&#39;myModelId&#39;</span><span class="p">)</span>
+                        <span class="p">.</span><span class="nx">observe</span><span class="p">(</span><span class="nx">model</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                                <span class="c1">// you&#39;d sync your view here, for now just dump the description to the console</span>
+                                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">model</span><span class="p">.</span><span class="nx">description</span><span class="p">);</span>
+                        <span class="p">});</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="na">[Test]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">RemovalByAPreProcessorEndsEventWorkflow</span><span class="p">()</span>
+<span class="p">{</span>
+        <span class="n">_model1PreEventProcessor</span><span class="p">.</span><span class="n">RegisterAction</span><span class="p">(</span><span class="n">model</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+                <span class="n">_router</span><span class="p">.</span><span class="n">RemoveModel</span><span class="p">(</span><span class="n">_model1</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="n">_router</span><span class="p">.</span><span class="n">PublishEvent</span><span class="p">(</span><span class="n">_model1</span><span class="p">.</span><span class="n">Id</span><span class="p">,</span> <span class="k">new</span> <span class="n">Event1</span><span class="p">());</span>
+        <span class="n">_model1EventProcessor</span><span class="p">.</span><span class="n">Event1Details</span><span class="p">.</span><span class="n">PreviewStage</span><span class="p">.</span><span class="n">ReceivedEvents</span><span class="p">.</span><span class="n">Count</span><span class="p">.</span><span class="n">ShouldBe</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+        <span class="n">_model1EventProcessor</span><span class="p">.</span><span class="n">Event1Details</span><span class="p">.</span><span class="n">NormalStage</span><span class="p">.</span><span class="n">ReceivedEvents</span><span class="p">.</span><span class="n">Count</span><span class="p">.</span><span class="n">ShouldBe</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+        <span class="n">_model1EventProcessor</span><span class="p">.</span><span class="n">Event1Details</span><span class="p">.</span><span class="n">CommittedStage</span><span class="p">.</span><span class="n">ReceivedEvents</span><span class="p">.</span><span class="n">Count</span><span class="p">.</span><span class="n">ShouldBe</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+        <span class="n">_model1Controller</span><span class="p">.</span><span class="n">ReceivedModels</span><span class="p">.</span><span class="n">Count</span><span class="p">.</span><span class="n">ShouldBe</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">ESP</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/golden-rules/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Keith Woods.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/golden-rules/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
